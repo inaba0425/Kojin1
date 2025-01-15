@@ -130,18 +130,18 @@ def choose_opening_move(board, stone):
     """
     for corner in CORNERS:
         x, y = corner
-        if board[y][x] == 0:
+        if board[y][x] == 0 and can_place_x_y(board, stone, x, y):  # 置ける場所のみ選ぶ
             return (x, y)
     return None  # コーナーに置ける手がない場合は None を返す
 
 class Kojin3AI:
     def face(self):
-        return "💛"  # 強いAIを示すアイコン
-
+        return "🐻"  # 強いAIを示すアイコン
+    
     def place(self, board, stone):
         best_move = None
         best_value = float('-inf')
-
+        
         # コーナーに置ける場合はそれを最優先で選ぶ
         opening_move = choose_opening_move(board, stone)
         if opening_move:
@@ -149,12 +149,14 @@ class Kojin3AI:
 
         # ネガマックスを使って最適な手を決定
         for move in valid_moves(board, stone):
-            new_board = [row[:] for row in board]
             x, y = move
-            new_board[y][x] = stone
-            move_value = minimax(new_board, 3, False, stone, float('-inf'), float('inf'))  # 深さ3で探索
-            if move_value > best_value:
-                best_value = move_value
-                best_move = move
-
+            # 置けるかどうか確認
+            if can_place_x_y(board, stone, x, y):
+                new_board = [row[:] for row in board]
+                new_board[y][x] = stone
+                move_value = minimax(new_board, 3, False, stone, float('-inf'), float('inf'))  # 深さ3で探索
+                if move_value > best_value:
+                    best_value = move_value
+                    best_move = move
+        
         return best_move

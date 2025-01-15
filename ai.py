@@ -1,7 +1,7 @@
 ﻿import numpy as np
 import random
 
-class Kojin1AI:
+class Kojin2AI:
    def __init__(self, color):
        self.color = color
 

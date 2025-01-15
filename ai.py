@@ -124,25 +124,37 @@ def minimax(board, depth, maximizing_player, stone, alpha, beta):
 def opponent(stone):
     return 3 - stone
 
-class Kojin1AI:
+def choose_opening_move(board, stone):
+    """
+    コーナーに石を置ける場合は、その手を選ぶ。
+    """
+    for corner in CORNERS:
+        x, y = corner
+        if board[y][x] == 0:
+            return (x, y)
+    return None  # コーナーに置ける手がない場合は None を返す
+
+class KojinAI:
     def face(self):
-        return "🐻🔥"  # 改良された強いAIを示すアイコン
+        return "🐻🔥"  # 強いAIを示すアイコン
     
     def place(self, board, stone):
         best_move = None
         best_value = float('-inf')
         
-        # 定石の選択
+        # コーナーに置ける場合はそれを最優先で選ぶ
         opening_move = choose_opening_move(board, stone)
         if opening_move:
             return opening_move
 
         # ネガマックスを使って最適な手を決定
         for move in valid_moves(board, stone):
-            new_board = simulate_move(board, move, stone)
-            move_value = negamax(new_board, 5, float('-inf'), float('inf'), stone)  # 深さ5で探索
+            new_board = [row[:] for row in board]
+            x, y = move
+            new_board[y][x] = stone
+            move_value = minimax(new_board, 3, False, stone, float('-inf'), float('inf'))  # 深さ3で探索
             if move_value > best_value:
                 best_value = move_value
                 best_move = move
-                
+        
         return best_move

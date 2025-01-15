@@ -136,7 +136,7 @@ def choose_opening_move(board, stone):
 
 class Kojin1AI:
     def face(self):
-        return "🐻🔥"  # 強いAIを示すアイコン
+        return "💛"  # 強いAIを示すアイコン
     
     def place(self, board, stone):
         best_move = None

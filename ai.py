@@ -124,23 +124,25 @@ def minimax(board, depth, maximizing_player, stone, alpha, beta):
 def opponent(stone):
     return 3 - stone
 
-class Kojin1AI(object):
+class Kojin1AI:
     def face(self):
-        return "🐻"  # 強いAIを示すアイコン
+        return "🐻🔥"  # 改良された強いAIを示すアイコン
     
     def place(self, board, stone):
         best_move = None
         best_value = float('-inf')
         
-        # ミニマックスを使って最適な手を決定
+        # 定石の選択
+        opening_move = choose_opening_move(board, stone)
+        if opening_move:
+            return opening_move
+
+        # ネガマックスを使って最適な手を決定
         for move in valid_moves(board, stone):
-            x, y = move
-            new_board = [row[:] for row in board]
-            new_board[y][x] = stone
-            move_value = minimax(new_board, 3, False, stone, float('-inf'), float('inf'))  # 深さ3で探索
+            new_board = simulate_move(board, move, stone)
+            move_value = negamax(new_board, 5, float('-inf'), float('inf'), stone)  # 深さ5で探索
             if move_value > best_value:
                 best_value = move_value
                 best_move = move
                 
         return best_move
-#play_othello(Kojin1AI())

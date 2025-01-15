@@ -134,7 +134,7 @@ def choose_opening_move(board, stone):
             return (x, y)
     return None  # コーナーに置ける手がない場合は None を返す
 
-class Kojin3AI:
+class Kojin1AI:
     def face(self):
         return "💛"  # 強いAIを示すアイコン
 
